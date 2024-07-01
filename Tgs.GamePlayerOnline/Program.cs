@@ -1,6 +1,4 @@
-using System.Net;
 using System.Net.Mime;
-using System.Net.Sockets;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,12 +28,6 @@ builder.Services.AddGamePlayerOnline(
 	{
 		var configuration = sp.GetRequiredService<IConfiguration>();
 		options.ConnectionString = configuration.GetConnectionString("Mongo")!;
-	},
-	(options, sp) =>
-	{
-		var configuration = sp.GetRequiredService<IConfiguration>();
-		options.IPAddress = builder.Configuration.GetSection("POD_IP").Value
-		?? Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).Single().ToString();
 	});
 
 builder.Services.AddHealthChecks();
@@ -48,8 +40,5 @@ _ = app.UseSwaggerUI();
 _ = app.MapControllers();
 
 app.MapHealthChecks("/healthz");
-
-_ = app.InitialSnowflakeWork();
-_ = app.InitializePlayerOnlineFormAsync();
 
 app.Run();

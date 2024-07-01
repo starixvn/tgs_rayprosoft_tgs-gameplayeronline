@@ -26,6 +26,20 @@ public class PlayerOnlineFormsController : ControllerBase
 				PlayerCode: playerCode),
 			cancellationToken: HttpContext.RequestAborted);
 
+	/// <param name="beginUpdateOn">
+	///     <example>2024-07-01 17:00:00</example>
+	/// </param>
+	[HttpGet("GetlastUpdate")]
+	public async ValueTask<PlayerOnlineFormGetResult[]> GetlastUpdateAsync(
+		[FromServices] IQueryService<PlayerOnlineFormGetLastUpdateQuery, PlayerOnlineFormGetResult> service,
+		[FromQuery] DateTime beginUpdateOn)
+		=> await service.QueryAsync(
+			query: new PlayerOnlineFormGetLastUpdateQuery(
+				BeginUpdateOn: beginUpdateOn),
+			cancellationToken: HttpContext.RequestAborted)
+			.ToArrayAsync(HttpContext.RequestAborted)
+			.ConfigureAwait(false);
+
 	/// <param name="gameProviderCode">
 	///     <example>KY</example>
 	/// </param>
@@ -37,13 +51,34 @@ public class PlayerOnlineFormsController : ControllerBase
 		[FromServices] ICommandService<PlayerOnlineFormAddCommand> service,
 		string gameProviderCode,
 		string playerCode,
-		PlayerOnlineFormAddViewModel source)
+		PlayerOnlineFormViewModel source)
 		=> service.ExecuteAsync(
 			command: new PlayerOnlineFormAddCommand(
 				GameProviderCode: gameProviderCode,
 				BrandCode: "GPI",
 				PlayerCode: playerCode,
 				Username: playerCode,
+				Balance: source.Balance,
+				FreeBalance: source.FreeBalance,
+				OutstandingBalance: source.OutstandingBalance),
+			cancellationToken: HttpContext.RequestAborted);
+
+	/// <param name="gameProviderCode">
+	///     <example>KY</example>
+	/// </param>
+	/// <param name="playerCode">
+	///     <example>4ucmqplxb029</example>
+	/// </param>
+	[HttpPut("Update/{gameProviderCode}/{playerCode}")]
+	public ValueTask UpdateAsync(
+		[FromServices] ICommandService<PlayerOnlineFormUpdateCommand> service,
+		string gameProviderCode,
+		string playerCode,
+		PlayerOnlineFormViewModel source)
+		=> service.ExecuteAsync(
+			command: new PlayerOnlineFormUpdateCommand(
+				GameProviderCode: gameProviderCode,
+				PlayerCode: playerCode,
 				Balance: source.Balance,
 				FreeBalance: source.FreeBalance,
 				OutstandingBalance: source.OutstandingBalance),

@@ -3,13 +3,11 @@ using Tgs.GamePlayerOnline.Core;
 using Tgs.GamePlayerOnline.Core.Models;
 using Tgs.MongoDB.Extensions.Attributes;
 using Tgs.GamePlayerOnline.Repositories.Models;
+using System.Runtime.CompilerServices;
 
 namespace Tgs.GamePlayerOnline.Repositories;
 
-internal sealed class PlayerOnlineRepository(
-	IMongoDatabase database,
-	ISnowflakeWork snowflake)
-	: IPlayerOnlineRepository
+internal sealed class PlayerOnlineRepository(IMongoDatabase database) : IPlayerOnlineRepository
 {
 	public ValueTask InitializeAsync(CancellationToken cancellationToken = default)
 		=> database
@@ -33,7 +31,7 @@ internal sealed class PlayerOnlineRepository(
 			Limit = 1
 		};
 
-		var datas = await database
+		using var cursor = await database
 			.GetCollection<PlayerOnlineModel>()
 			.FindAsync(
 				filter: filter,
@@ -41,7 +39,7 @@ internal sealed class PlayerOnlineRepository(
 				cancellationToken: cancellationToken)
 			.ConfigureAwait(false);
 
-		var data = await datas
+		var data = await cursor
 			.FirstOrDefaultAsync(
 				cancellationToken: cancellationToken)
 			.ConfigureAwait(false);
@@ -49,7 +47,6 @@ internal sealed class PlayerOnlineRepository(
 		return data == null
 			? null
 			: new(
-				Id: data.Id,
 				GameProviderCode: data.GameProviderCode,
 				BrandCode: data.BrandCode,
 				PlayerCode: data.PlayerCode,
@@ -61,7 +58,38 @@ internal sealed class PlayerOnlineRepository(
 				ExpireOn: data.ExpireOn);
 	}
 
-	public async ValueTask<long> AddAsync(
+	public async IAsyncEnumerable<PlayerOnlineForm> GetLastUpdateAsync(
+		DateTime beginUpdateOn,
+		[EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		var builder = Builders<PlayerOnlineModel>.Filter;
+
+		var filter = builder.Gte(x => x.UpdateOn, beginUpdateOn);
+
+		using var cursor = await database
+			.GetCollection<PlayerOnlineModel>()
+			.FindAsync(
+				filter: filter,
+				cancellationToken: cancellationToken)
+			.ConfigureAwait(false);
+
+		while (await cursor.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+		{
+			foreach (var data in cursor.Current)
+				yield return new(
+					GameProviderCode: data.GameProviderCode,
+					BrandCode: data.BrandCode,
+					PlayerCode: data.PlayerCode,
+					Username: data.Username,
+					Balance: data.Balance,
+					FreeBalance: data.FreeBalance,
+					OutstandingBalance: data.OutstandingBalance,
+					UpdateOn: data.UpdateOn,
+					ExpireOn: data.ExpireOn);
+		}
+	}
+
+	public async ValueTask AddAsync(
 		string gameProviderCode,
 		string brandCode,
 		string playerCode,
@@ -71,11 +99,8 @@ internal sealed class PlayerOnlineRepository(
 		decimal outstandingBalance,
 		CancellationToken cancellationToken = default)
 	{
-		var id = snowflake.GetId();
-
 		var document = new PlayerOnlineModel
 		{
-			Id = id,
 			GameProviderCode = gameProviderCode,
 			BrandCode = brandCode,
 			PlayerCode = playerCode,
@@ -93,11 +118,46 @@ internal sealed class PlayerOnlineRepository(
 				document: document,
 				cancellationToken: cancellationToken)
 			.ConfigureAwait(false);
-
-		return id;
 	}
 
-	public async ValueTask<long> DeleteAsync(
+	public async ValueTask UpdateAsync(
+		string gameProviderCode,
+		string playerCode,
+		decimal balance,
+		decimal freeBalance,
+		decimal outstandingBalance,
+		CancellationToken cancellationToken = default)
+	{
+		var builder = Builders<PlayerOnlineModel>.Filter;
+
+		var filter = builder.And(
+			builder.Eq(x => x.GameProviderCode, gameProviderCode),
+			builder.Eq(x => x.PlayerCode, playerCode));
+
+		var now = DateTime.UtcNow;
+		var update = Builders<PlayerOnlineModel>.Update
+			.Set(m => m.Balance, balance)
+			.Set(m => m.FreeBalance, freeBalance)
+			.Set(m => m.OutstandingBalance, outstandingBalance)
+			.Set(m => m.UpdateOn, now)
+			.Set(m => m.ExpireOn, now.AddSeconds(30));
+
+		var options = new UpdateOptions
+		{
+			IsUpsert = true
+		};
+
+		await database
+			.GetCollection<PlayerOnlineModel>()
+			.UpdateOneAsync(
+				filter: filter,
+				update: update,
+				options: options,
+				cancellationToken: cancellationToken)
+			.ConfigureAwait(false);
+	}
+
+	public async ValueTask DeleteAsync(
 		string gameProviderCode,
 		string playerCode,
 		CancellationToken cancellationToken = default)
@@ -108,13 +168,11 @@ internal sealed class PlayerOnlineRepository(
 			builder.Eq(x => x.GameProviderCode, gameProviderCode),
 			builder.Eq(x => x.PlayerCode, playerCode));
 
-		var result = await database
+		await database
 			.GetCollection<PlayerOnlineModel>()
 			.DeleteOneAsync(
 				filter: filter,
 				cancellationToken: cancellationToken)
 			.ConfigureAwait(false);
-
-		return result.DeletedCount;
 	}
 }

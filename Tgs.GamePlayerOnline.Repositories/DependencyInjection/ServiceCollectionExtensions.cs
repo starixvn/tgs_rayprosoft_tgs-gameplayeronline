@@ -10,5 +10,6 @@ public static class ServiceCollectionExtensions
 		this IServiceCollection services,
 		Func<IServiceProvider, IMongoDatabase> mongoDatabaseResolver)
 		=> services
-		.AddTransient<IPlayerOnlineRepository>(provider => ActivatorUtilities.CreateInstance<PlayerOnlineRepository>(provider, mongoDatabaseResolver(provider)));
+		.AddTransient<IPlayerOnlineRepository>(provider => ActivatorUtilities.CreateInstance<PlayerOnlineRepository>(provider, mongoDatabaseResolver(provider)))
+		.AddHostedService<PlayerOnlineRepositoryInitializer>();
 }

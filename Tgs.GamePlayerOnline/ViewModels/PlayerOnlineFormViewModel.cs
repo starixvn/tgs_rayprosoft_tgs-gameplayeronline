@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tgs.GamePlayerOnline.ViewModels;
 
-public sealed record class PlayerOnlineFormAddViewModel
+public sealed record class PlayerOnlineFormViewModel
 {
 	/// <example>0.0</example>
 	[Required]
