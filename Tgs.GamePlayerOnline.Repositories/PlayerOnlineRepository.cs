@@ -58,13 +58,13 @@ internal sealed class PlayerOnlineRepository(IMongoDatabase database) : IPlayerO
 				ExpireOn: data.ExpireOn);
 	}
 
-	public async IAsyncEnumerable<PlayerOnlineForm> GetLastUpdateAsync(
-		DateTime beginUpdateOn,
+	public async IAsyncEnumerable<PlayerOnlineForm> GetUpdatedBeforeAsync(
+		DateTime lastUpdateOn,
 		[EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		var builder = Builders<PlayerOnlineModel>.Filter;
 
-		var filter = builder.Gte(x => x.UpdateOn, beginUpdateOn);
+		var filter = builder.Lte(x => x.UpdateOn, lastUpdateOn);
 
 		using var cursor = await database
 			.GetCollection<PlayerOnlineModel>()
@@ -89,38 +89,7 @@ internal sealed class PlayerOnlineRepository(IMongoDatabase database) : IPlayerO
 		}
 	}
 
-	public async ValueTask AddAsync(
-		string gameProviderCode,
-		string brandCode,
-		string playerCode,
-		string username,
-		decimal balance,
-		decimal freeBalance,
-		decimal outstandingBalance,
-		CancellationToken cancellationToken = default)
-	{
-		var document = new PlayerOnlineModel
-		{
-			GameProviderCode = gameProviderCode,
-			BrandCode = brandCode,
-			PlayerCode = playerCode,
-			Username = username,
-			Balance = balance,
-			FreeBalance = freeBalance,
-			OutstandingBalance = outstandingBalance,
-			UpdateOn = DateTime.UtcNow,
-			ExpireOn = null
-		};
-
-		await database
-			.GetCollection<PlayerOnlineModel>()
-			.InsertOneAsync(
-				document: document,
-				cancellationToken: cancellationToken)
-			.ConfigureAwait(false);
-	}
-
-	public async ValueTask UpdateAsync(
+	public async ValueTask UpsertAsync(
 		string gameProviderCode,
 		string playerCode,
 		decimal balance,
@@ -140,7 +109,7 @@ internal sealed class PlayerOnlineRepository(IMongoDatabase database) : IPlayerO
 			.Set(m => m.FreeBalance, freeBalance)
 			.Set(m => m.OutstandingBalance, outstandingBalance)
 			.Set(m => m.UpdateOn, now)
-			.Set(m => m.ExpireOn, now.AddSeconds(30));
+			.Set(m => m.ExpireOn, now.AddDays(1));
 
 		var options = new UpdateOptions
 		{

@@ -3,15 +3,15 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-internal sealed class PlayerOnlineFormGetLastUpdateService(
+internal sealed class PlayerOnlineFormGetUpdatedBeforeService(
 	IPlayerOnlineRepository playerOnlineRepository)
-	: IQueryService<PlayerOnlineFormGetLastUpdateQuery, PlayerOnlineFormGetResult>
+	: IQueryService<PlayerOnlineFormGetUpdatedBeforeQuery, PlayerOnlineFormGetResult>
 {
-	public async IAsyncEnumerable<PlayerOnlineFormGetResult> QueryAsync(PlayerOnlineFormGetLastUpdateQuery query, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<PlayerOnlineFormGetResult> QueryAsync(PlayerOnlineFormGetUpdatedBeforeQuery query, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		var result = playerOnlineRepository
-			.GetLastUpdateAsync(
-				beginUpdateOn: query.BeginUpdateOn,
+			.GetUpdatedBeforeAsync(
+				lastUpdateOn: query.LastUpdateOn,
 				cancellationToken: cancellationToken)
 			.ConfigureAwait(false);
 

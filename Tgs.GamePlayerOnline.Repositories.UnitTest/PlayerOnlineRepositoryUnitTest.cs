@@ -1,6 +1,5 @@
 using MongoDB.Driver;
 using NSubstitute;
-using Tgs.GamePlayerOnline.Core;
 using Tgs.GamePlayerOnline.Repositories.Models;
 
 namespace Tgs.GamePlayerOnline.Repositories.UnitTest;
@@ -45,13 +44,13 @@ public sealed class PlayerOnlineRepositoryUnitTest
 	}
 
 	[Fact]
-	public async Task GetLastUpdate()
+	public async Task GetUpdatedBefore()
 	{
-		var beginUpdateOn = DateTime.Now.Subtract(TimeSpan.FromSeconds(10));
+		var lastUpdateOn = DateTime.Now.Subtract(TimeSpan.FromSeconds(10));
 
 		var builder = Builders<PlayerOnlineModel>.Filter;
 
-		var filter = builder.Gte(x => x.UpdateOn, beginUpdateOn);
+		var filter = builder.Gte(x => x.UpdateOn, lastUpdateOn);
 
 		var fakerMongoDatabase = Substitute.For<IMongoDatabase>();
 		var fakerCollection = Substitute.For<IMongoCollection<PlayerOnlineModel>>();
@@ -73,57 +72,14 @@ public sealed class PlayerOnlineRepositoryUnitTest
 			database: fakerMongoDatabase);
 
 		_ = await sut
-			.GetLastUpdateAsync(
-				beginUpdateOn: beginUpdateOn)
+			.GetUpdatedBeforeAsync(
+				lastUpdateOn: lastUpdateOn)
 			.ToListAsync()
 			.ConfigureAwait(true);
 	}
 
 	[Fact]
-	public async Task Add()
-	{
-		var fakerMongoDatabase = Substitute.For<IMongoDatabase>();
-
-		var gameProviderCode = "KY";
-		var brandCode = "GPI";
-		var playerCode = "4ucmqplxb029";
-
-		var sut = new PlayerOnlineRepository(
-			database: fakerMongoDatabase);
-
-		await sut
-			.AddAsync(
-				gameProviderCode: gameProviderCode,
-				brandCode: brandCode,
-				playerCode: playerCode,
-				username: playerCode,
-				balance: 10,
-				freeBalance: 3,
-				outstandingBalance: 2)
-			.ConfigureAwait(true);
-
-		var document = new PlayerOnlineModel
-		{
-			GameProviderCode = gameProviderCode,
-			BrandCode = brandCode,
-			PlayerCode = playerCode,
-			Username = playerCode,
-			Balance = 10,
-			FreeBalance = 3,
-			OutstandingBalance = 2,
-			UpdateOn = DateTime.UtcNow,
-			ExpireOn = null
-		};
-
-		_ = fakerMongoDatabase.Received(1)
-			.GetCollection<PlayerOnlineModel>(
-				name: Arg.Is("player_onlines"))
-			.InsertOneAsync(
-				document: Arg.Is(document));
-	}
-
-	[Fact]
-	public async Task Update()
+	public async Task Upsert()
 	{
 		var fakerMongoDatabase = Substitute.For<IMongoDatabase>();
 
@@ -134,7 +90,7 @@ public sealed class PlayerOnlineRepositoryUnitTest
 			database: fakerMongoDatabase);
 
 		await sut
-			.UpdateAsync(
+			.UpsertAsync(
 				gameProviderCode: gameProviderCode,
 				playerCode: playerCode,
 				balance: 18,
@@ -148,11 +104,13 @@ public sealed class PlayerOnlineRepositoryUnitTest
 			builder.Eq(x => x.GameProviderCode, gameProviderCode),
 			builder.Eq(x => x.PlayerCode, playerCode));
 
+		var now = DateTime.UtcNow;
 		var update = Builders<PlayerOnlineModel>.Update
 			.Set(m => m.Balance, 18)
 			.Set(m => m.FreeBalance, 6)
 			.Set(m => m.OutstandingBalance, 8)
-			.Set(m => m.UpdateOn, DateTime.UtcNow);
+			.Set(m => m.UpdateOn, now)
+			.Set(m => m.UpdateOn, now.AddDays(1));
 
 		var options = new UpdateOptions
 		{

@@ -2,14 +2,14 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-internal sealed class PlayerOnlineFormUpdateService(
+internal sealed class PlayerOnlineFormUpsertService(
 	IPlayerOnlineRepository playerOnlineRepository)
-	: ICommandService<PlayerOnlineFormUpdateCommand>
+	: ICommandService<PlayerOnlineFormUpsertCommand>
 {
-	public async ValueTask ExecuteAsync(PlayerOnlineFormUpdateCommand command, CancellationToken cancellationToken = default)
+	public async ValueTask ExecuteAsync(PlayerOnlineFormUpsertCommand command, CancellationToken cancellationToken = default)
 	{
 		await playerOnlineRepository
-			.UpdateAsync(
+			.UpsertAsync(
 				gameProviderCode: command.GameProviderCode,
 				playerCode: command.PlayerCode,
 				balance: command.Balance,
