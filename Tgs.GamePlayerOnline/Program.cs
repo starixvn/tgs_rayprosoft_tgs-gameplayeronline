@@ -77,10 +77,12 @@ builder.Services
 	.AddNatsMessageQueue(config => config
 	.ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
 	.AddHandler<GamePlayerOnlineUpsertMessageHandler>("game.gameplayeronline.upsert.request", typeof(GamePlayerOnlineUpsertMessageHandler).FullName!.ToLower())
-	.AddHandler<GamePlayerOnlineDeleteMessageHandler>("game.gameplayeronline.delete.request", typeof(GamePlayerOnlineDeleteMessageHandler).FullName!.ToLower()))
+	.AddHandler<GamePlayerOnlineDeleteMessageHandler>("game.gameplayeronline.delete.request", typeof(GamePlayerOnlineDeleteMessageHandler).FullName!.ToLower())
+	.AddHandler<GamePlayerOnlineCleanMessageHandler>("game.gameplayeronline.clean.request", typeof(GamePlayerOnlineCleanMessageHandler).FullName!.ToLower()))
 	.ClearAllExchanges()
 	.AddNatsGlobPatternExchange("game.gameplayeronline.upsert.request")
-	.AddNatsGlobPatternExchange("game.gameplayeronline.delete.request");
+	.AddNatsGlobPatternExchange("game.gameplayeronline.delete.request")
+	.AddNatsGlobPatternExchange("game.gameplayeronline.clean.request");
 
 builder.Services
 	.AddOpenTelemetry()

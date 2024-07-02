@@ -87,4 +87,12 @@ public class PlayerOnlineFormsController : ControllerBase
 				PlayerCode = playerCode
 			},
 			cancellationToken: HttpContext.RequestAborted);
+
+	[HttpPost("Clean")]
+	public ValueTask CleanAsync(
+		[FromServices] IMessageSender messageSender)
+		=> messageSender.PublishAsync(
+			subject: "game.gameplayeronline.clean.request",
+			data: new PlayerOnlineCleanRequest(),
+			cancellationToken: HttpContext.RequestAborted);
 }

@@ -11,5 +11,6 @@ public static class ServiceCollectionExtensions
 				targetAssembly: Assembly.GetExecutingAssembly(),
 				lifetime: ServiceLifetime.Transient)
 		.AddSingleton<IPlayerOnlineActionDispatcher, PlayerOnlineActionDispatcher>()
+		.AddSingleton<IPlayerOnlineCleanDispatcher, PlayerOnlineCleanDispatcher>()
 		.AddTransient<IHangfireUtensil, HangfireUtensil>();
 }
