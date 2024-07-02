@@ -1,10 +1,13 @@
 ﻿using System.Net.Mime;
 using System.Text.Json.Serialization;
+using Hangfire;
+using Hangfire.Redis.StackExchange;
 using Microsoft.AspNetCore.Mvc;
 using NATS.Client.Core;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Tgs.GamePlayerOnline;
 using Tgs.GamePlayerOnline.Messages;
 using Tgs.MessageQueue.Nats.Serializers;
 
@@ -46,6 +49,16 @@ builder.Services.AddSwaggerGen(c =>
 		c.IncludeXmlComments(xmlFileName);
 	}
 });
+
+builder.Services.AddHangfire(
+	(sp, config) =>
+	{
+		var connectionString = builder.Configuration.GetConnectionString("redis")!;
+		_ = config
+			.UseRedisStorage(connectionString, new() { Prefix = "game-playeronline-hangfire:" })
+			.WithJobExpirationTimeout(TimeSpan.FromMinutes(30));
+	})
+	.AddHangfireServer();
 
 builder.Services.AddGamePlayerOnline(
 	(options, sp) =>
@@ -108,8 +121,20 @@ var app = builder.Build();
 _ = app.UseSwagger();
 _ = app.UseSwaggerUI();
 
+app.UseHangfireDashboard(
+	"/hangfire",
+	new DashboardOptions
+	{
+		Authorization = [
+			new IgnoreHangfireAuthorizationFilter()
+		]
+	});
+
+
 _ = app.MapControllers();
 
 app.MapHealthChecks("/healthz");
+
+_ = app.UseHangfireRegisterAsync();
 
 app.Run();

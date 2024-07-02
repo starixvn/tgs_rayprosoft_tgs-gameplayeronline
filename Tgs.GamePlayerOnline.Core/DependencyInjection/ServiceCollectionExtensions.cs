@@ -10,5 +10,6 @@ public static class ServiceCollectionExtensions
 			.RegisterAllServiceUtilityTypes(
 				targetAssembly: Assembly.GetExecutingAssembly(),
 				lifetime: ServiceLifetime.Transient)
-		.AddSingleton<IPlayerOnlineActionDispatcher, PlayerOnlineActionDispatcher>();
+		.AddSingleton<IPlayerOnlineActionDispatcher, PlayerOnlineActionDispatcher>()
+		.AddTransient<IHangfireUtensil, HangfireUtensil>();
 }
