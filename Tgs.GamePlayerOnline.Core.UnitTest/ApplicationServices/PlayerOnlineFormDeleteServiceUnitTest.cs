@@ -1,4 +1,4 @@
-using NSubstitute;
+﻿using NSubstitute;
 using Tgs.GamePlayerOnline.Core.ApplicationServices;
 
 namespace Tgs.GamePlayerOnline.Core.UnitTest.ApplicationServices;
@@ -9,8 +9,8 @@ public sealed class PlayerOnlineFormDeleteServiceUnitTest
 	public async Task Normal_Process()
 	{
 		var fakerRepository = Substitute.For<IPlayerOnlineRepository>();
-		var sut = new PlayerOnlineFormDeleteService(fakerRepository);
-		var command = new PlayerOnlineFormDeleteCommand(
+		var sut = new PlayerOnlineDeleteService(fakerRepository);
+		var command = new PlayerOnlineDeleteCommand(
 			GameProviderCode: "KY",
 			PlayerCode: "4ucmqplxb029");
 

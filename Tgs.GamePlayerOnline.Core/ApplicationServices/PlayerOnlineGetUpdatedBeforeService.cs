@@ -1,13 +1,13 @@
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-internal sealed class PlayerOnlineFormGetUpdatedBeforeService(
+internal sealed class PlayerOnlineGetUpdatedBeforeService(
 	IPlayerOnlineRepository playerOnlineRepository)
-	: IQueryService<PlayerOnlineFormGetUpdatedBeforeQuery, PlayerOnlineFormGetResult>
+	: IQueryService<PlayerOnlineGetUpdatedBeforeQuery, PlayerOnlineGetResult>
 {
-	public async IAsyncEnumerable<PlayerOnlineFormGetResult> QueryAsync(PlayerOnlineFormGetUpdatedBeforeQuery query, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<PlayerOnlineGetResult> QueryAsync(PlayerOnlineGetUpdatedBeforeQuery query, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		var result = playerOnlineRepository
 			.GetUpdatedBeforeAsync(
@@ -17,7 +17,7 @@ internal sealed class PlayerOnlineFormGetUpdatedBeforeService(
 
 		await foreach (var data in result)
 		{
-			yield return new PlayerOnlineFormGetResult(
+			yield return new PlayerOnlineGetResult(
 				GameProviderCode: data.GameProviderCode,
 				BrandCode: data.BrandCode,
 				PlayerCode: data.PlayerCode,

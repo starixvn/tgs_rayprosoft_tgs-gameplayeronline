@@ -1,9 +1,12 @@
 ﻿using System.Net.Mime;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using NATS.Client.Core;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Tgs.GamePlayerOnline.Messages;
+using Tgs.MessageQueue.Nats.Serializers;
 
 var filterInstrumentations = new[] { "html", "ico", "png", "jpg" };
 
@@ -50,6 +53,21 @@ builder.Services.AddGamePlayerOnline(
 		var configuration = sp.GetRequiredService<IConfiguration>();
 		options.ConnectionString = configuration.GetConnectionString("Mongo")!;
 	});
+
+builder.Services
+	.AddKeyedSingleton("Nats", (sp, _) => new NatsConnection(NatsOpts.Default with
+	{
+		Url = builder.Configuration.GetConnectionString("Nats")!,
+		SerializerRegistry = TgsNatsSerializerRegistration.Default
+	}))
+	.AddMessageQueue()
+	.AddNatsMessageQueue(config => config
+	.ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
+	.AddHandler<GamePlayerOnlineUpsertMessageHandler>("game.gameplayeronline.upsert.request", typeof(GamePlayerOnlineUpsertMessageHandler).FullName!.ToLower())
+	.AddHandler<GamePlayerOnlineDeleteMessageHandler>("game.gameplayeronline.delete.request", typeof(GamePlayerOnlineDeleteMessageHandler).FullName!.ToLower()))
+	.ClearAllExchanges()
+	.AddNatsGlobPatternExchange("game.gameplayeronline.upsert.request")
+	.AddNatsGlobPatternExchange("game.gameplayeronline.delete.request");
 
 builder.Services
 	.AddOpenTelemetry()

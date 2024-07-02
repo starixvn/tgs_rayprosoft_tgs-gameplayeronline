@@ -1,12 +1,12 @@
-using Tgs.ServiceUtility;
+﻿using Tgs.ServiceUtility;
 
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-internal sealed class PlayerOnlineFormDeleteService(
+internal sealed class PlayerOnlineDeleteService(
 	IPlayerOnlineRepository playerOnlineRepository)
-	: ICommandService<PlayerOnlineFormDeleteCommand>
+	: ICommandService<PlayerOnlineDeleteCommand>
 {
-	public async ValueTask ExecuteAsync(PlayerOnlineFormDeleteCommand command, CancellationToken cancellationToken = default)
+	public async ValueTask ExecuteAsync(PlayerOnlineDeleteCommand command, CancellationToken cancellationToken = default)
 	{
 		await playerOnlineRepository
 			.DeleteAsync(

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Tgs.GamePlayerOnline.Core;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -8,5 +9,6 @@ public static class ServiceCollectionExtensions
 		=> services
 			.RegisterAllServiceUtilityTypes(
 				targetAssembly: Assembly.GetExecutingAssembly(),
-				lifetime: ServiceLifetime.Transient);
+				lifetime: ServiceLifetime.Transient)
+		.AddSingleton<IPlayerOnlineActionDispatcher, PlayerOnlineActionDispatcher>();
 }

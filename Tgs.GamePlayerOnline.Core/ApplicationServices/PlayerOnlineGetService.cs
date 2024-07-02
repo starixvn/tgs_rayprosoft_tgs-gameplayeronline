@@ -1,12 +1,12 @@
-using Tgs.ServiceUtility;
+﻿using Tgs.ServiceUtility;
 
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-internal sealed class PlayerOnlineFormGetService(
+internal sealed class PlayerOnlineGetService(
 	IPlayerOnlineRepository playerOnlineRepository)
-	: IGetService<PlayerOnlineFormGetQuery, PlayerOnlineFormGetResult?>
+	: IGetService<PlayerOnlineGetQuery, PlayerOnlineGetResult?>
 {
-	public async ValueTask<PlayerOnlineFormGetResult?> GetAsync(PlayerOnlineFormGetQuery query, CancellationToken cancellationToken = default)
+	public async ValueTask<PlayerOnlineGetResult?> GetAsync(PlayerOnlineGetQuery query, CancellationToken cancellationToken = default)
 	{
 		var result = await playerOnlineRepository
 			.GetAsync(
@@ -15,7 +15,7 @@ internal sealed class PlayerOnlineFormGetService(
 				cancellationToken: cancellationToken)
 			.ConfigureAwait(false);
 		
-		return result == null ? null : new PlayerOnlineFormGetResult(
+		return result == null ? null : new PlayerOnlineGetResult(
 			GameProviderCode: result.GameProviderCode,
 			BrandCode: result.BrandCode,
 			PlayerCode: result.PlayerCode,
