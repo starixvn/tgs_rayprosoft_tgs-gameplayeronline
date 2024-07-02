@@ -3,7 +3,7 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-internal sealed class PlayerOnlineFormGetUpdatedBeforeService(
+internal class PlayerOnlineFormGetUpdatedBeforeService(
 	IPlayerOnlineRepository playerOnlineRepository)
 	: IQueryService<PlayerOnlineFormGetUpdatedBeforeQuery, PlayerOnlineFormGetResult>
 {

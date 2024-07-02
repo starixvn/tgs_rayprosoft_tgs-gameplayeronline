@@ -4,7 +4,7 @@ using Tgs.GamePlayerOnline.Repositories.Models;
 
 namespace Tgs.GamePlayerOnline.Repositories.UnitTest;
 
-public sealed class PlayerOnlineRepositoryUnitTest
+public class PlayerOnlineRepositoryUnitTest
 {
 	[Fact]
 	public async Task Get()

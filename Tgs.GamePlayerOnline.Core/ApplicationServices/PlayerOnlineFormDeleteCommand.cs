@@ -1,5 +1,5 @@
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-public sealed record class PlayerOnlineFormDeleteCommand(
+public record class PlayerOnlineFormDeleteCommand(
 	string GameProviderCode,
 	string PlayerCode);

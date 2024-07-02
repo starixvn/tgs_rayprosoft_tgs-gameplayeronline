@@ -1,7 +1,7 @@
 namespace Tgs.MongoDB.Extensions.Attributes;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public sealed class CollectionAttribute(string name) : Attribute
+public class CollectionAttribute(string name) : Attribute
 {
 	public string Name { get; init; } = name;
 

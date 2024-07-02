@@ -1,6 +1,6 @@
 namespace Tgs.GamePlayerOnline.Core.Models;
 
-public sealed record PlayerOnlineForm(
+public record PlayerOnlineForm(
 	string GameProviderCode,
 	string BrandCode,
 	string PlayerCode,

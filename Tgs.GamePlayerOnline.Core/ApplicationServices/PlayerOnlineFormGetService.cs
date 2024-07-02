@@ -2,7 +2,7 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-internal sealed class PlayerOnlineFormGetService(
+internal class PlayerOnlineFormGetService(
 	IPlayerOnlineRepository playerOnlineRepository)
 	: IGetService<PlayerOnlineFormGetQuery, PlayerOnlineFormGetResult?>
 {

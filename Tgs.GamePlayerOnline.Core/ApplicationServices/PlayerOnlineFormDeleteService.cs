@@ -2,7 +2,7 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-internal sealed class PlayerOnlineFormDeleteService(
+internal class PlayerOnlineFormDeleteService(
 	IPlayerOnlineRepository playerOnlineRepository)
 	: ICommandService<PlayerOnlineFormDeleteCommand>
 {

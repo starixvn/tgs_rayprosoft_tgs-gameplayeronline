@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace Tgs.GamePlayerOnline.Repositories;
 
-internal sealed class PlayerOnlineRepository(IMongoDatabase database) : IPlayerOnlineRepository
+internal class PlayerOnlineRepository(IMongoDatabase database) : IPlayerOnlineRepository
 {
 	public ValueTask InitializeAsync(CancellationToken cancellationToken = default)
 		=> database

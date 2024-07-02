@@ -2,7 +2,7 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-internal sealed class PlayerOnlineFormUpsertService(
+internal class PlayerOnlineFormUpsertService(
 	IPlayerOnlineRepository playerOnlineRepository)
 	: ICommandService<PlayerOnlineFormUpsertCommand>
 {

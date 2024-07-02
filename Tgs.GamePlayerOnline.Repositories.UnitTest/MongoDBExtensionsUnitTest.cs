@@ -9,7 +9,7 @@ namespace Tgs.GamePlayerOnline.Repositories.UnitTest;
 [MongoDB.Extensions.Attributes.Collection("my_model")]
 [Index("ix_game_provider_code", fieldName: "game_provider_code")]
 [Index("ix_expire_on", fieldName: "expire_on", ExpireAfterSeconds = 1)]
-public sealed class MyModel
+public class MyModel
 {
 	[BsonId]
 	[BsonRepresentation(BsonType.Int64)]
@@ -23,7 +23,7 @@ public sealed class MyModel
 	public DateTime? ExpireOn { get; set; }
 }
 
-public sealed class MongoDBExtensionsUnitTest
+public class MongoDBExtensionsUnitTest
 {
 	[Fact]
 	public void CollectionAttribute()

@@ -1,6 +1,6 @@
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-public sealed record class PlayerOnlineFormUpsertCommand(
+public record class PlayerOnlineFormUpsertCommand(
 	string GameProviderCode,
 	string PlayerCode,
 	decimal Balance,

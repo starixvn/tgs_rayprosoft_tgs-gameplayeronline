@@ -3,7 +3,7 @@ using Tgs.GamePlayerOnline.Core.ApplicationServices;
 
 namespace Tgs.GamePlayerOnline.Core.UnitTest.ApplicationServices;
 
-public sealed class PlayerOnlineFormDeleteServiceUnitTest
+public class PlayerOnlineFormDeleteServiceUnitTest
 {
 	[Fact]
 	public async Task Normal_Process()

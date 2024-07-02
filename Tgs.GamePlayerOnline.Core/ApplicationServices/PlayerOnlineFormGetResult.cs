@@ -1,6 +1,6 @@
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-public sealed record class PlayerOnlineFormGetResult(
+public record class PlayerOnlineFormGetResult(
 	string GameProviderCode,
 	string BrandCode,
 	string PlayerCode,

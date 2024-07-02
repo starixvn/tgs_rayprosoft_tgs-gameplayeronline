@@ -3,7 +3,7 @@ using MongoDB.Driver;
 namespace Tgs.MongoDB.Extensions.Attributes;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public sealed class IndexAttribute(string indexName, string fieldName) : Attribute
+public class IndexAttribute(string indexName, string fieldName) : Attribute
 {
 	public string IndexName { get; init; } = indexName;
 
