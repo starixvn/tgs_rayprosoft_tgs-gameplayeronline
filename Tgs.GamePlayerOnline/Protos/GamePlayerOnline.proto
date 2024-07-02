@@ -1,0 +1,19 @@
+﻿syntax = "proto3";
+
+import "phoenix/protobuf/decimal.proto";
+
+option csharp_namespace = "Tgs.GamePlayerOnline.Protos";
+
+// The request message containing the user's name.
+message PlayerOnlineUpsertRequest {
+	string game_provider_code = 1 ;
+	string player_code = 2;
+	phoenix.protobuf.DecimalValue balance = 3;
+	phoenix.protobuf.DecimalValue free_balance = 4;
+	phoenix.protobuf.DecimalValue outstanding_balance = 5;
+}
+
+message PlayerOnlineDeleteRequest {
+	string game_provider_code = 1 ;
+	string player_code = 2;
+}

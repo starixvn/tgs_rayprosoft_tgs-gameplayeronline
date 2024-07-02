@@ -1,12 +1,12 @@
-using Tgs.ServiceUtility;
+﻿using Tgs.ServiceUtility;
 
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
 
-internal sealed class PlayerOnlineFormUpsertService(
+internal sealed class PlayerOnlineUpsertService(
 	IPlayerOnlineRepository playerOnlineRepository)
-	: ICommandService<PlayerOnlineFormUpsertCommand>
+	: ICommandService<PlayerOnlineUpsertCommand>
 {
-	public async ValueTask ExecuteAsync(PlayerOnlineFormUpsertCommand command, CancellationToken cancellationToken = default)
+	public async ValueTask ExecuteAsync(PlayerOnlineUpsertCommand command, CancellationToken cancellationToken = default)
 	{
 		await playerOnlineRepository
 			.UpsertAsync(

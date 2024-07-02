@@ -1,4 +1,4 @@
-using NSubstitute;
+﻿using NSubstitute;
 using Tgs.GamePlayerOnline.Core.ApplicationServices;
 
 namespace Tgs.GamePlayerOnline.Core.UnitTest.ApplicationServices;
@@ -9,8 +9,8 @@ public sealed class PlayerOnlineFormGetUpdatedBeforeServiceUnitTest
 	public async Task Normal_Process()
 	{
 		var fakerRepository = Substitute.For<IPlayerOnlineRepository>();
-		var sut = new PlayerOnlineFormGetUpdatedBeforeService(fakerRepository);
-		var query = new PlayerOnlineFormGetUpdatedBeforeQuery(
+		var sut = new PlayerOnlineGetUpdatedBeforeService(fakerRepository);
+		var query = new PlayerOnlineGetUpdatedBeforeQuery(
 			LastUpdateOn: new DateTime(2024, 07, 01, 13, 10, 00));
 
 		await sut.QueryAsync(

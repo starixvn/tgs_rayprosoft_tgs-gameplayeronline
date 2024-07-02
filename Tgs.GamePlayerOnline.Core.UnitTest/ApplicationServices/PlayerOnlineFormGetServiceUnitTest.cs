@@ -1,4 +1,4 @@
-using NSubstitute;
+﻿using NSubstitute;
 using Tgs.GamePlayerOnline.Core.ApplicationServices;
 
 namespace Tgs.GamePlayerOnline.Core.UnitTest.ApplicationServices;
@@ -9,8 +9,8 @@ public sealed class PlayerOnlineFormGetServiceUnitTest
 	public async Task Normal_Process()
 	{
 		var fakerRepository = Substitute.For<IPlayerOnlineRepository>();
-		var sut = new PlayerOnlineFormGetService(fakerRepository);
-		var query = new PlayerOnlineFormGetQuery(
+		var sut = new PlayerOnlineGetService(fakerRepository);
+		var query = new PlayerOnlineGetQuery(
 			GameProviderCode: "KY",
 			PlayerCode: "4ucmqplxb029");
 
