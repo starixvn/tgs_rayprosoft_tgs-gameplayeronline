@@ -26,7 +26,7 @@ public class PlayerOnlineFormsController : ControllerBase
 				PlayerCode: playerCode),
 			cancellationToken: HttpContext.RequestAborted);
 
-	/// <param name="beginUpdateOn">
+	/// <param name="lastUpdateOn">
 	///     <example>2024-07-01 17:00:00</example>
 	/// </param>
 	[HttpGet("GetUpdatedBefore")]

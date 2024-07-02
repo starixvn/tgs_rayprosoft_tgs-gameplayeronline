@@ -7,8 +7,8 @@ using Tgs.MongoDB.Extensions.Attributes;
 namespace Tgs.GamePlayerOnline.Repositories.UnitTest;
 
 [MongoDB.Extensions.Attributes.Collection("my_model")]
-[Index("ix_game_provider_code", fieldName: nameof(GameProviderCode))]
-[Index("ix_expire_on", fieldName: nameof(ExpireOn), ExpireAfterSeconds = 1)]
+[Index("ix_game_provider_code", fieldName: "game_provider_code")]
+[Index("ix_expire_on", fieldName: "expire_on", ExpireAfterSeconds = 1)]
 public sealed class MyModel
 {
 	[BsonId]
