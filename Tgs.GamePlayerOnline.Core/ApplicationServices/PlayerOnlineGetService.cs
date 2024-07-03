@@ -17,9 +17,7 @@ internal sealed class PlayerOnlineGetService(
 
 		return result == null ? null : new PlayerOnlineGetResult(
 			GameProviderCode: result.GameProviderCode,
-			BrandCode: result.BrandCode,
 			PlayerCode: result.PlayerCode,
-			Username: result.Username,
 			Balance: result.Balance,
 			FreeBalance: result.FreeBalance,
 			OutstandingBalance: result.OutstandingBalance);

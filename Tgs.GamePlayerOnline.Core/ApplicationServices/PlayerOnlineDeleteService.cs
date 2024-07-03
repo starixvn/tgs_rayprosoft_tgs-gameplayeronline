@@ -8,11 +8,16 @@ internal sealed class PlayerOnlineDeleteService(
 {
 	public async ValueTask ExecuteAsync(PlayerOnlineDeleteCommand command, CancellationToken cancellationToken = default)
 	{
-		await playerOnlineRepository
-			.DeleteAsync(
+		if (await playerOnlineRepository.GetAsync(
+			gameProviderCode: command.GameProviderCode,
+			playerCode: command.PlayerCode,
+			cancellationToken).ConfigureAwait(false) is not null)
+		{
+			await playerOnlineRepository.DeleteAsync(
 				gameProviderCode: command.GameProviderCode,
 				playerCode: command.PlayerCode,
 				cancellationToken: cancellationToken)
-			.ConfigureAwait(false);
+				.ConfigureAwait(false);
+		}
 	}
 }

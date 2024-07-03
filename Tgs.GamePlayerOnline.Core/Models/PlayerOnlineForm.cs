@@ -2,9 +2,7 @@
 
 public sealed record PlayerOnlineForm(
 	string GameProviderCode,
-	string BrandCode,
 	string PlayerCode,
-	string Username,
 	decimal Balance,
 	decimal FreeBalance,
 	decimal OutstandingBalance,

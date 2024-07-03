@@ -49,9 +49,7 @@ internal sealed class PlayerOnlineRepository(IMongoDatabase database) : IPlayerO
 			? null
 			: new(
 				GameProviderCode: data.GameProviderCode,
-				BrandCode: data.BrandCode,
 				PlayerCode: data.PlayerCode,
-				Username: data.Username,
 				Balance: data.Balance,
 				FreeBalance: data.FreeBalance,
 				OutstandingBalance: data.OutstandingBalance,
@@ -79,9 +77,7 @@ internal sealed class PlayerOnlineRepository(IMongoDatabase database) : IPlayerO
 			foreach (var data in cursor.Current)
 				yield return new(
 					GameProviderCode: data.GameProviderCode,
-					BrandCode: data.BrandCode,
 					PlayerCode: data.PlayerCode,
-					Username: data.Username,
 					Balance: data.Balance,
 					FreeBalance: data.FreeBalance,
 					OutstandingBalance: data.OutstandingBalance,

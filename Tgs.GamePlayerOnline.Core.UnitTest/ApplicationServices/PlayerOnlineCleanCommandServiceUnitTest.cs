@@ -22,9 +22,7 @@ public sealed class PlayerOnlineCleanCommandServiceUnitTest
 			Deadline: new DateTime(2024, 07, 01, 17, 00, 00));
 		var playerOnline = new PlayerOnlineGetResult(
 			GameProviderCode: "KY",
-			BrandCode: "KY",
 			PlayerCode: "4ucmqplxb029",
-			Username: "4ucmqplxb029",
 			Balance: 7,
 			FreeBalance: 4,
 			OutstandingBalance: 3);

@@ -3,27 +3,26 @@ using Tgs.GamePlayerOnline.Core.ApplicationServices;
 
 namespace Tgs.GamePlayerOnline.Core.UnitTest.ApplicationServices;
 
-public sealed class PlayerOnlineFormGetServiceUnitTest
+public sealed class PlayerOnlineGetUpdatedBeforeServiceUnitTest
 {
 	[Fact]
 	public async Task Normal_Process()
 	{
 		var fakerRepository = Substitute.For<IPlayerOnlineRepository>();
-		var sut = new PlayerOnlineGetService(fakerRepository);
-		var query = new PlayerOnlineGetQuery(
-			GameProviderCode: "KY",
-			PlayerCode: "4ucmqplxb029");
+		var sut = new PlayerOnlineGetUpdatedBeforeService(fakerRepository);
+		var query = new PlayerOnlineGetUpdatedBeforeQuery(
+			LastUpdateOn: new DateTime(2024, 07, 01, 13, 10, 00));
 
-		await sut.GetAsync(
+		await sut.QueryAsync(
 				query: query,
 				cancellationToken: default)
+			.ToListAsync()
 			.ConfigureAwait(true);
 
 		_ = fakerRepository
 			.Received(1)
-			.GetAsync(
-				gameProviderCode: Arg.Is("KY"),
-				playerCode: Arg.Is("4ucmqplxb029"),
+			.GetUpdatedBeforeAsync(
+				lastUpdateOn: Arg.Is(new DateTime(2024, 07, 01, 13, 10, 00)),
 				cancellationToken: default);
 	}
 }
