@@ -1,4 +1,4 @@
-namespace Tgs.MongoDB.Extensions.Attributes;
+﻿namespace Tgs.MongoDB.Extensions.Attributes;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public sealed class CollectionAttribute(string name) : Attribute

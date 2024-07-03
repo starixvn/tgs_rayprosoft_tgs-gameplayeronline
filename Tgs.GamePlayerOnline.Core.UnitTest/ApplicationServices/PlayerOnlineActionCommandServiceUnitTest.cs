@@ -1,4 +1,4 @@
-using NSubstitute;
+﻿using NSubstitute;
 using Tgs.GamePlayerOnline.Core.ApplicationServices;
 using Tgs.ServiceUtility;
 

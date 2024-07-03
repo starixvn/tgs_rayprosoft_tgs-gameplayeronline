@@ -14,7 +14,7 @@ internal sealed class PlayerOnlineGetService(
 				playerCode: query.PlayerCode,
 				cancellationToken: cancellationToken)
 			.ConfigureAwait(false);
-		
+
 		return result == null ? null : new PlayerOnlineGetResult(
 			GameProviderCode: result.GameProviderCode,
 			BrandCode: result.BrandCode,

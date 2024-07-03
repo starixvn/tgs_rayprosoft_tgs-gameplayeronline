@@ -1,4 +1,4 @@
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 
 namespace Tgs.MongoDB.Extensions.Attributes;
 
@@ -15,6 +15,8 @@ public sealed class IndexAttribute(string indexName, string fieldName) : Attribu
 	/// </summary>
 	public double ExpireAfterSeconds { get; init; }
 
+	public static IReadOnlyCollection<IndexAttribute> GetDefines<TModel>() => DefineHoldere<TModel>.Defines;
+
 	public Task<string> CreateAsync<TModel>(IMongoCollection<TModel> collection, CancellationToken cancellationToken = default)
 	{
 		var index = new IndexKeysDefinitionBuilder<TModel>().Ascending(new StringFieldDefinition<TModel>(FieldName));
@@ -29,8 +31,6 @@ public sealed class IndexAttribute(string indexName, string fieldName) : Attribu
 			model: createIndexModel,
 			cancellationToken: cancellationToken);
 	}
-
-	public static IReadOnlyCollection<IndexAttribute> GetDefines<TModel>() => DefineHoldere<TModel>.Defines;
 
 	private static class DefineHoldere<TModel>
 	{

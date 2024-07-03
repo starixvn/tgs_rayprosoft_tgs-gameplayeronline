@@ -1,9 +1,10 @@
+﻿using System.Runtime.CompilerServices;
+
 using MongoDB.Driver;
 using Tgs.GamePlayerOnline.Core;
 using Tgs.GamePlayerOnline.Core.Models;
-using Tgs.MongoDB.Extensions.Attributes;
 using Tgs.GamePlayerOnline.Repositories.Models;
-using System.Runtime.CompilerServices;
+using Tgs.MongoDB.Extensions.Attributes;
 
 namespace Tgs.GamePlayerOnline.Repositories;
 

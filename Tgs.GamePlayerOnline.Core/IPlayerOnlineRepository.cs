@@ -1,4 +1,4 @@
-using Tgs.GamePlayerOnline.Core.Models;
+﻿using Tgs.GamePlayerOnline.Core.Models;
 
 namespace Tgs.GamePlayerOnline.Core;
 

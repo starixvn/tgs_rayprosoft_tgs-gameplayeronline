@@ -1,5 +1,6 @@
+﻿using Tgs.GamePlayerOnline.Core.JobApplicationServices;
+
 using Tgs.ServiceUtility;
-using Tgs.GamePlayerOnline.Core.JobApplicationServices;
 
 namespace Tgs.GamePlayerOnline.Core;
 

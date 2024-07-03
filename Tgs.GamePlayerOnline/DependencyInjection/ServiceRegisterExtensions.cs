@@ -1,4 +1,4 @@
-using Tgs.GamePlayerOnline.Core;
+﻿using Tgs.GamePlayerOnline.Core;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

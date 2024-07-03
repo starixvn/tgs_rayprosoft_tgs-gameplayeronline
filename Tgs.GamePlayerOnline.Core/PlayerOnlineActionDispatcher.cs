@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Tgs.GamePlayerOnline.Core.ApplicationServices;
 
 namespace Tgs.GamePlayerOnline.Core;
+
 internal class PlayerOnlineActionDispatcher(IServiceProvider serviceProvider) : IPlayerOnlineActionDispatcher, IDisposable, IAsyncDisposable
 {
 	private readonly ConcurrentDictionary<string, PlayerOnlineActionChannel> _counters = new();
