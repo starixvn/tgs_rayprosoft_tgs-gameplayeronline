@@ -1,6 +1,7 @@
 ﻿using System.Net.Mime;
 using System.Text.Json.Serialization;
 using Hangfire;
+using Hangfire.MemoryStorage;
 using Hangfire.Redis.StackExchange;
 using Microsoft.AspNetCore.Mvc;
 using NATS.Client.Core;
@@ -53,10 +54,19 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddHangfire(
 	(sp, config) =>
 	{
-		var connectionString = builder.Configuration.GetConnectionString("redis")!;
-		_ = config
-			.UseRedisStorage(connectionString, new() { Prefix = "game-playeronline-hangfire:" })
-			.WithJobExpirationTimeout(TimeSpan.FromMinutes(30));
+		var env = sp.GetRequiredService<IWebHostEnvironment>();
+
+		if (!env.EnvironmentName.EndsWith("test", StringComparison.OrdinalIgnoreCase))
+		{
+			var connectionString = builder.Configuration.GetConnectionString("redis")!;
+			_ = config
+				.UseRedisStorage(connectionString, new() { Prefix = "game-playeronline-hangfire:" })
+				.WithJobExpirationTimeout(TimeSpan.FromMinutes(30));
+		}
+		else
+		{
+			_ = config.UseMemoryStorage();
+		}
 	})
 	.AddHangfireServer();
 

@@ -7,16 +7,19 @@ using Valhalla.MessageQueue;
 
 namespace Tgs.GamePlayerOnline.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
-public class PlayerOnlineFormsController : ControllerBase
+public class PlayerOnlineController : ControllerBase
 {
-	/// <param name="gameProviderCode">
-	///     <example>KY</example>
-	/// </param>
-	/// <param name="playerCode">
-	///     <example>4ucmqplxb029</example>
-	/// </param>
+	/// <summary>
+	/// Gets the asynchronous.
+	/// </summary>
+	/// <param name="service">The service.</param>
+	/// <param name="gameProviderCode">The game provider code.</param>
+	/// <example>KY</example>
+	/// <param name="playerCode">The player code.</param>
+	/// <example>4ucmqplxb029</example>
+	/// <returns></returns>
 	[HttpGet("Get/{gameProviderCode}/{playerCode}")]
 	public ValueTask<PlayerOnlineGetResult> GetAsync(
 		[FromServices] IGetService<PlayerOnlineGetQuery, PlayerOnlineGetResult> service,
@@ -28,9 +31,13 @@ public class PlayerOnlineFormsController : ControllerBase
 				PlayerCode: playerCode),
 			cancellationToken: HttpContext.RequestAborted);
 
-	/// <param name="lastUpdateOn">
-	///     <example>2024-07-01 17:00:00</example>
-	/// </param>
+	/// <summary>
+	/// Gets the updated before asynchronous.
+	/// </summary>
+	/// <param name="service">The service.</param>
+	/// <param name="lastUpdateOn">The last update on.</param>
+	/// <example>2024-07-01 17:00:00</example>
+	/// <returns></returns>
 	[HttpGet("GetUpdatedBefore")]
 	public async ValueTask<PlayerOnlineGetResult[]> GetUpdatedBeforeAsync(
 		[FromServices] IQueryService<PlayerOnlineGetUpdatedBeforeQuery, PlayerOnlineGetResult> service,
@@ -47,7 +54,9 @@ public class PlayerOnlineFormsController : ControllerBase
 	/// </summary>
 	/// <param name="messageSender">The message sender.</param>
 	/// <param name="gameProviderCode">The game provider code.</param>
+	/// <example>KY</example>
 	/// <param name="playerCode">The player code.</param>
+	/// <example>4ucmqplxb029</example>
 	/// <param name="source">The source.</param>
 	/// <returns></returns>
 	[HttpPut("{gameProviderCode}/{playerCode}")]
@@ -55,7 +64,7 @@ public class PlayerOnlineFormsController : ControllerBase
 		[FromServices] IMessageSender messageSender,
 		string gameProviderCode,
 		string playerCode,
-		PlayerOnlineFormViewModel source)
+		PlayerOnlineUpsertViewModel source)
 		=> messageSender.PublishAsync(
 			subject: "game.gameplayeronline.upsert.request",
 			data: new PlayerOnlineUpsertRequest
@@ -68,12 +77,15 @@ public class PlayerOnlineFormsController : ControllerBase
 			},
 			cancellationToken: HttpContext.RequestAborted);
 
-	/// <param name="gameProviderCode">
-	///     <example>KY</example>
-	/// </param>
-	/// <param name="playerCode">
-	///     <example>4ucmqplxb029</example>
-	/// </param>
+	/// <summary>
+	/// Deletes the asynchronous.
+	/// </summary>
+	/// <param name="messageSender">The message sender.</param>
+	/// <param name="gameProviderCode">The game provider code.</param>
+	/// <example>KY</example>
+	/// <param name="playerCode">The player code.</param>
+	/// <example>4ucmqplxb029</example>
+	/// <returns></returns>
 	[HttpDelete("Delete/{gameProviderCode}/{playerCode}")]
 	public ValueTask DeleteAsync(
 		[FromServices] IMessageSender messageSender,
