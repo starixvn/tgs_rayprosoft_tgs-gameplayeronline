@@ -35,6 +35,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Tgs.GamePlayerOnline.Core\Tgs.GamePlayerOnline.Core.csproj" />
+		<ProjectReference Include="..\Tgs.GamePlayerOnline.Protos\Tgs.GamePlayerOnline.Protos.csproj" />
 		<ProjectReference Include="..\Tgs.GamePlayerOnline.Repositories\Tgs.GamePlayerOnline.Repositories.csproj" />
 	</ItemGroup>
 

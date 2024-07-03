@@ -10,6 +10,7 @@
 		<PackageReference Include="Grpc.AspNetCore" Version="2.63.0" />
 		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
 		<PackageReference Include="Hangfire.Dashboard.Management" Version="1.7.9" />
+		<PackageReference Include="Hangfire.MemoryStorage" Version="1.8.1.1" />
 		<PackageReference Include="Hangfire.Redis.StackExchange" Version="1.9.3" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
@@ -24,11 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Protos\GamePlayerOnline.proto" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Protobuf Include="Protos\GamePlayerOnline.proto" />
+	  <ProjectReference Include="..\Tgs.GamePlayerOnline.Protos\Tgs.GamePlayerOnline.Protos.csproj" />
 	</ItemGroup>
 
 </Project>

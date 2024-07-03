@@ -6,7 +6,8 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "POD_IP": "127.0.0.1"
+        "OTEL_SERVICE_NAME": "Game-GamePlayerOnline(local)",
+        "NODE_IP": "otel.rpgp.cc"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5229"
@@ -17,21 +18,11 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "POD_IP": "127.0.0.1"
+        "OTEL_SERVICE_NAME": "Game-GamePlayerOnline(local)",
+        "NODE_IP": "otel.rpgp.cc"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7153;http://localhost:5229"
-    },
-    "Container (Dockerfile)": {
-      "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
-      "environmentVariables": {
-        "ASPNETCORE_HTTPS_PORTS": "8081",
-        "ASPNETCORE_HTTP_PORTS": "8080"
-      },
-      "publishAllPorts": true,
-      "useSSL": true
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",

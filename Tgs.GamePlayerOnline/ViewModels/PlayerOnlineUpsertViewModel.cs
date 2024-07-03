@@ -2,7 +2,7 @@
 
 namespace Tgs.GamePlayerOnline.ViewModels;
 
-public sealed record class PlayerOnlineFormViewModel
+public sealed record class PlayerOnlineUpsertViewModel
 {
 	/// <example>0.0</example>
 	[Required]
