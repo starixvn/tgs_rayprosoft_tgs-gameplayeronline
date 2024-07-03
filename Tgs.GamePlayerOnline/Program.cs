@@ -1,10 +1,13 @@
 ﻿using System.Net.Mime;
 using System.Text.Json.Serialization;
+using Hangfire;
+using Hangfire.Redis.StackExchange;
 using Microsoft.AspNetCore.Mvc;
 using NATS.Client.Core;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Tgs.GamePlayerOnline;
 using Tgs.GamePlayerOnline.Messages;
 using Tgs.MessageQueue.Nats.Serializers;
 
@@ -47,6 +50,16 @@ builder.Services.AddSwaggerGen(c =>
 	}
 });
 
+builder.Services.AddHangfire(
+	(sp, config) =>
+	{
+		var connectionString = builder.Configuration.GetConnectionString("redis")!;
+		_ = config
+			.UseRedisStorage(connectionString, new() { Prefix = "game-playeronline-hangfire:" })
+			.WithJobExpirationTimeout(TimeSpan.FromMinutes(30));
+	})
+	.AddHangfireServer();
+
 builder.Services.AddGamePlayerOnline(
 	(options, sp) =>
 	{
@@ -64,10 +77,12 @@ builder.Services
 	.AddNatsMessageQueue(config => config
 	.ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
 	.AddHandler<GamePlayerOnlineUpsertMessageHandler>("game.gameplayeronline.upsert.request", typeof(GamePlayerOnlineUpsertMessageHandler).FullName!.ToLower())
-	.AddHandler<GamePlayerOnlineDeleteMessageHandler>("game.gameplayeronline.delete.request", typeof(GamePlayerOnlineDeleteMessageHandler).FullName!.ToLower()))
+	.AddHandler<GamePlayerOnlineDeleteMessageHandler>("game.gameplayeronline.delete.request", typeof(GamePlayerOnlineDeleteMessageHandler).FullName!.ToLower())
+	.AddHandler<GamePlayerOnlineCleanMessageHandler>("game.gameplayeronline.clean.request", typeof(GamePlayerOnlineCleanMessageHandler).FullName!.ToLower()))
 	.ClearAllExchanges()
 	.AddNatsGlobPatternExchange("game.gameplayeronline.upsert.request")
-	.AddNatsGlobPatternExchange("game.gameplayeronline.delete.request");
+	.AddNatsGlobPatternExchange("game.gameplayeronline.delete.request")
+	.AddNatsGlobPatternExchange("game.gameplayeronline.clean.request");
 
 builder.Services
 	.AddOpenTelemetry()
@@ -108,8 +123,20 @@ var app = builder.Build();
 _ = app.UseSwagger();
 _ = app.UseSwaggerUI();
 
+app.UseHangfireDashboard(
+	"/hangfire",
+	new DashboardOptions
+	{
+		Authorization = [
+			new IgnoreHangfireAuthorizationFilter()
+		]
+	});
+
+
 _ = app.MapControllers();
 
 app.MapHealthChecks("/healthz");
+
+_ = app.UseHangfireRegisterAsync();
 
 app.Run();

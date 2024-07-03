@@ -3,7 +3,6 @@ using System.Threading.Channels;
 using Microsoft.Extensions.Logging;
 using Tgs.GamePlayerOnline.Core.ApplicationServices;
 using Tgs.ServiceUtility;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tgs.GamePlayerOnline.Core;
 
@@ -30,11 +29,7 @@ internal class PlayerOnlineActionChannel(
 
 	public string Key { get; } = key;
 
-	~PlayerOnlineActionChannel()
-	{
-		// 請勿變更此程式碼。請將清除程式碼放入 'Dispose(bool disposing)' 方法
-		Dispose(disposing: false);
-	}
+	~PlayerOnlineActionChannel() => Dispose(disposing: false);
 
 	public async ValueTask PrepareAsync(CancellationToken cancellationToken = default)
 	{

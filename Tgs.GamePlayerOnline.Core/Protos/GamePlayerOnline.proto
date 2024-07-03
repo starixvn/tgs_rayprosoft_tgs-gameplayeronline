@@ -17,3 +17,5 @@ message PlayerOnlineDeleteRequest {
 	string game_provider_code = 1 ;
 	string player_code = 2;
 }
+
+message PlayerOnlineCleanRequest { }
