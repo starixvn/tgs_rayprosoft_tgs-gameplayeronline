@@ -1,3 +1,4 @@
+﻿using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Tgs.GamePlayerOnline.Core.ApplicationServices;
 using Tgs.ServiceUtility;
@@ -9,36 +10,45 @@ public sealed class PlayerOnlineCleanCommandServiceUnitTest
 	[Fact]
 	public async Task Normal_Process()
 	{
+		var faceLogger = NullLogger<PlayerOnlineCleanCommandService>.Instance;
 		var fakerQueryService = Substitute.For<IQueryService<PlayerOnlineGetUpdatedBeforeQuery, PlayerOnlineGetResult>>();
-		var fakerDeleteService = Substitute.For<ICommandService<PlayerOnlineDeleteCommand>>();
-		var sut = new PlayerOnlineCleanCommandService(fakerQueryService, fakerDeleteService);
+		var fakerCheckingPlayerService = Substitute.For<ICommandService<PlayerOnlineCheckingPlayerCommand>>();
+		var sut = new PlayerOnlineCleanCommandService(
+			faceLogger,
+			fakerQueryService,
+			fakerCheckingPlayerService);
+
 		var command = new PlayerOnlineCleanCommand(
 			Deadline: new DateTime(2024, 07, 01, 17, 00, 00));
-		fakerQueryService
+		var playerOnline = new PlayerOnlineGetResult(
+			GameProviderCode: "KY",
+			BrandCode: "KY",
+			PlayerCode: "4ucmqplxb029",
+			Username: "4ucmqplxb029",
+			Balance: 7,
+			FreeBalance: 4,
+			OutstandingBalance: 3);
+		_ = fakerQueryService
 			.QueryAsync(
 				query: Arg.Is<PlayerOnlineGetUpdatedBeforeQuery>(cmd =>
 					cmd.LastUpdateOn == new DateTime(2024, 07, 01, 17, 00, 00)),
 				cancellationToken: default)
-			.Returns(new[] { new PlayerOnlineGetResult(
-				GameProviderCode: "KY",
-				BrandCode: "KY",
-				PlayerCode: "4ucmqplxb029",
-				Username: "4ucmqplxb029",
-				Balance: 7,
-				FreeBalance: 4,
-				OutstandingBalance: 3) }.ToAsyncEnumerable());
+			.Returns(new[] { playerOnline }.ToAsyncEnumerable());
 
 		await sut.ExecuteAsync(
 				command: command,
 				cancellationToken: default)
 			.ConfigureAwait(true);
 
-		_ = fakerDeleteService
+		_ = fakerCheckingPlayerService
 			.Received(1)
 			.ExecuteAsync(
-				command: Arg.Is<PlayerOnlineDeleteCommand>(cmd =>
-					cmd.GameProviderCode == "KY" &&
-					cmd.PlayerCode == "4ucmqplxb029"),
-				cancellationToken: default);
+			command: Arg.Is(new PlayerOnlineCheckingPlayerCommand(
+				GameProviderCode: playerOnline.GameProviderCode,
+				PlayerCode: playerOnline.PlayerCode,
+				Balance: playerOnline.Balance,
+				FreeBalance: playerOnline.FreeBalance,
+				OutstandingBalance: playerOnline.OutstandingBalance)),
+			cancellationToken: Arg.Any<CancellationToken>());
 	}
 }

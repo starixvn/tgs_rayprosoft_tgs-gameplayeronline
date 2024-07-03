@@ -1,5 +1,4 @@
-
-using Hangfire;
+﻿using Hangfire;
 using Microsoft.Extensions.Logging;
 using Tgs.ServiceUtility;
 

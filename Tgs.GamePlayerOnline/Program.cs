@@ -132,7 +132,6 @@ app.UseHangfireDashboard(
 		]
 	});
 
-
 _ = app.MapControllers();
 
 app.MapHealthChecks("/healthz");

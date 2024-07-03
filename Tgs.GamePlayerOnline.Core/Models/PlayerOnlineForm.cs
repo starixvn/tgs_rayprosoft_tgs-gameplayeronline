@@ -1,4 +1,4 @@
-namespace Tgs.GamePlayerOnline.Core.Models;
+﻿namespace Tgs.GamePlayerOnline.Core.Models;
 
 public sealed record PlayerOnlineForm(
 	string GameProviderCode,

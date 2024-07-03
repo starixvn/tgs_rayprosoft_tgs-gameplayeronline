@@ -1,6 +1,7 @@
 ﻿using Tgs.ServiceUtility;
 
 namespace Tgs.GamePlayerOnline.Core.ApplicationServices;
+
 internal class PlayerOnlineActionCommandService(
 	ICommandService<PlayerOnlineUpsertCommand> upsertService,
 	ICommandService<PlayerOnlineDeleteCommand> deleteService) : ICommandService<PlayerOnlineActionCommand>
