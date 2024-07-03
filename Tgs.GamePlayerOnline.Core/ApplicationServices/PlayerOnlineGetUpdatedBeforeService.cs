@@ -19,9 +19,7 @@ internal sealed class PlayerOnlineGetUpdatedBeforeService(
 		{
 			yield return new PlayerOnlineGetResult(
 				GameProviderCode: data.GameProviderCode,
-				BrandCode: data.BrandCode,
 				PlayerCode: data.PlayerCode,
-				Username: data.Username,
 				Balance: data.Balance,
 				FreeBalance: data.FreeBalance,
 				OutstandingBalance: data.OutstandingBalance);

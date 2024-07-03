@@ -3,7 +3,7 @@ using Tgs.GamePlayerOnline.Core.ApplicationServices;
 
 namespace Tgs.GamePlayerOnline.Core.UnitTest.ApplicationServices;
 
-public sealed class PlayerOnlineFormUpsertServiceUnitTest
+public sealed class PlayerOnlineUpsertServiceUnitTest
 {
 	[Fact]
 	public async Task Normal_Process()
