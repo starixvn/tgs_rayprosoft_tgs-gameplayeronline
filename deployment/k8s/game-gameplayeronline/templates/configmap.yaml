@@ -8,8 +8,13 @@ data:
     {
       "Logging": {
         "LogLevel": {
-            "Default": "Warning"
+            "Default": "Warning",
+            "Tgs.GamePlayerOnline.Messages": "Information"
          }
+      },
+      "GamePlayerOnlineConnectionStrings": {
+        "GameProvidersClientBaseUrl": "http://game-gameproviders/",
+        "GameFundTransferClientBaseUrl": "dns:///game-gamefundtransfer:9090/"
       }
     }
   otel-collector-config.yaml: |

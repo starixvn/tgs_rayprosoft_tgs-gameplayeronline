@@ -65,6 +65,16 @@ builder.Services.AddGamePlayerOnline(
 	{
 		var configuration = sp.GetRequiredService<IConfiguration>();
 		options.ConnectionString = configuration.GetConnectionString("Mongo")!;
+	})
+	.AddGameProvidersClient((options, sp) =>
+	{
+		var configuration = sp.GetRequiredService<IConfiguration>();
+		options.BaseUrl = configuration.GetValue<Uri>("GamePlayerOnlineConnectionStrings:GameProvidersClientBaseUrl")!;
+	})
+	.AddGameFundTransferClient((options, sp) =>
+	{
+		var configuration = sp.GetRequiredService<IConfiguration>();
+		options.BaseUrl = configuration.GetValue<Uri>("GamePlayerOnlineConnectionStrings:GameFundTransferClientBaseUrl")!;
 	});
 
 builder.Services
