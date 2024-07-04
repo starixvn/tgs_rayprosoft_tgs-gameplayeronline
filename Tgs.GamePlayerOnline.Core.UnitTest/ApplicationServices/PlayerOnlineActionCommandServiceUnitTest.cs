@@ -103,4 +103,82 @@ public sealed class PlayerOnlineActionCommandServiceUnitTest
 					cmd.PlayerCode == "4ucmqplxb029"),
 				cancellationToken: default);
 	}
+
+	[Fact]
+	public async Task Balance_Less_Than_Point01()
+	{
+		var fakerUpsertService = Substitute.For<ICommandService<PlayerOnlineUpsertCommand>>();
+		var fakerDeleteService = Substitute.For<ICommandService<PlayerOnlineDeleteCommand>>();
+		var sut = new PlayerOnlineActionCommandService(fakerUpsertService, fakerDeleteService);
+		var command = new PlayerOnlineActionCommand(
+			GameProviderCode: "KY",
+			PlayerCode: "4ucmqplxb029",
+			IsUpsert: true,
+			Balance: 0.009m,
+			FreeBalance: 0,
+			OutstandingBalance: 0);
+
+		await sut.ExecuteAsync(
+				command: command,
+				cancellationToken: default)
+			.ConfigureAwait(true);
+
+		_ = fakerUpsertService
+			.Received(0)
+			.ExecuteAsync(
+				command: Arg.Is<PlayerOnlineUpsertCommand>(cmd =>
+					cmd.GameProviderCode == "KY" &&
+					cmd.PlayerCode == "4ucmqplxb029" &&
+					cmd.Balance == 0.009m &&
+					cmd.FreeBalance == 0 &&
+					cmd.OutstandingBalance == 0),
+				cancellationToken: default);
+
+		_ = fakerDeleteService
+			.Received(1)
+			.ExecuteAsync(
+				command: Arg.Is<PlayerOnlineDeleteCommand>(cmd =>
+					cmd.GameProviderCode == "KY" &&
+					cmd.PlayerCode == "4ucmqplxb029"),
+				cancellationToken: default);
+	}
+
+	[Fact]
+	public async Task Balance_EqualTo_Point01()
+	{
+		var fakerUpsertService = Substitute.For<ICommandService<PlayerOnlineUpsertCommand>>();
+		var fakerDeleteService = Substitute.For<ICommandService<PlayerOnlineDeleteCommand>>();
+		var sut = new PlayerOnlineActionCommandService(fakerUpsertService, fakerDeleteService);
+		var command = new PlayerOnlineActionCommand(
+			GameProviderCode: "KY",
+			PlayerCode: "4ucmqplxb029",
+			IsUpsert: true,
+			Balance: 0.01m,
+			FreeBalance: 0,
+			OutstandingBalance: 0);
+
+		await sut.ExecuteAsync(
+				command: command,
+				cancellationToken: default)
+			.ConfigureAwait(true);
+
+		_ = fakerUpsertService
+			.Received(1)
+			.ExecuteAsync(
+				command: Arg.Is<PlayerOnlineUpsertCommand>(cmd =>
+					cmd.GameProviderCode == "KY" &&
+					cmd.PlayerCode == "4ucmqplxb029" &&
+					cmd.Balance == 0.01m &&
+					cmd.FreeBalance == 0 &&
+					cmd.OutstandingBalance == 0),
+				cancellationToken: default);
+
+		_ = fakerDeleteService
+			.Received(0)
+			.ExecuteAsync(
+				command: Arg.Is<PlayerOnlineDeleteCommand>(cmd =>
+					cmd.GameProviderCode == "KY" &&
+					cmd.PlayerCode == "4ucmqplxb029"),
+				cancellationToken: default);
+	}
 }
