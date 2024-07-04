@@ -36,11 +36,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EditorConfigFiles Remove="D:\00.Git\tgs-gameplayeronline\Tgs.GamePlayerOnline.IntegrationTest\.editorconfig" />
+    <EditorConfigFiles Remove=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="D:\00.Git\tgs-gameplayeronline\Tgs.GamePlayerOnline.IntegrationTest\.editorconfig" />
+    <None Include=".editorconfig" />
   </ItemGroup>
 
 </Project>
