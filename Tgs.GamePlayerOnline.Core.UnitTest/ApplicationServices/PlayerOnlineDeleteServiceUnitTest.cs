@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using NSubstitute;
+﻿using NSubstitute;
 using Tgs.GamePlayerOnline.Core.ApplicationServices;
 
 namespace Tgs.GamePlayerOnline.Core.UnitTest.ApplicationServices;
@@ -19,7 +18,7 @@ public sealed class PlayerOnlineDeleteServiceUnitTest
 			gameProviderCode: Arg.Is(command.GameProviderCode),
 			playerCode: Arg.Is(command.PlayerCode),
 			cancellationToken: Arg.Any<CancellationToken>())
-			.Returns(new Models.PlayerOnlineForm(
+			.Returns(new Models.PlayerOnline(
 				GameProviderCode: "KY",
 				PlayerCode: "4ucmqplxb029",
 				Balance: 0.0m,
@@ -54,7 +53,7 @@ public sealed class PlayerOnlineDeleteServiceUnitTest
 			gameProviderCode: Arg.Is(command.GameProviderCode),
 			playerCode: Arg.Is(command.PlayerCode),
 			cancellationToken: Arg.Any<CancellationToken>())
-			.Returns((Models.PlayerOnlineForm?)null);
+			.Returns((Models.PlayerOnline?)null);
 
 		await sut.ExecuteAsync(
 				command: command,

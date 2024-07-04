@@ -15,10 +15,8 @@ public class PlayerOnlineController : ControllerBase
 	/// Gets the asynchronous.
 	/// </summary>
 	/// <param name="service">The service.</param>
-	/// <param name="gameProviderCode">The game provider code.</param>
-	/// <example>KY</example>
-	/// <param name="playerCode">The player code.</param>
-	/// <example>4ucmqplxb029</example>
+	/// <param name="gameProviderCode">The game provider code. Example: <example>KY</example></param>
+	/// <param name="playerCode">The player code. Example: <example>4ucmqplxb029</example></param>
 	/// <returns></returns>
 	[HttpGet("Get/{gameProviderCode}/{playerCode}")]
 	public ValueTask<PlayerOnlineGetResult> GetAsync(
@@ -35,8 +33,7 @@ public class PlayerOnlineController : ControllerBase
 	/// Gets the updated before asynchronous.
 	/// </summary>
 	/// <param name="service">The service.</param>
-	/// <param name="lastUpdateOn">The last update on.</param>
-	/// <example>2024-07-01 17:00:00</example>
+	/// <param name="lastUpdateOn">The last update on. Example: <example>2024-07-01 17:00:00</example></param>
 	/// <returns></returns>
 	[HttpGet("GetUpdatedBefore")]
 	public async ValueTask<PlayerOnlineGetResult[]> GetUpdatedBeforeAsync(
@@ -53,10 +50,8 @@ public class PlayerOnlineController : ControllerBase
 	/// Upserts the asynchronous.
 	/// </summary>
 	/// <param name="messageSender">The message sender.</param>
-	/// <param name="gameProviderCode">The game provider code.</param>
-	/// <example>KY</example>
-	/// <param name="playerCode">The player code.</param>
-	/// <example>4ucmqplxb029</example>
+	/// <param name="gameProviderCode">The game provider code. Example: <example>KY</example></param>
+	/// <param name="playerCode">The player code. Example: <example>4ucmqplxb029</example></param>
 	/// <param name="source">The source.</param>
 	/// <returns></returns>
 	[HttpPut("{gameProviderCode}/{playerCode}")]
@@ -81,10 +76,8 @@ public class PlayerOnlineController : ControllerBase
 	/// Deletes the asynchronous.
 	/// </summary>
 	/// <param name="messageSender">The message sender.</param>
-	/// <param name="gameProviderCode">The game provider code.</param>
-	/// <example>KY</example>
-	/// <param name="playerCode">The player code.</param>
-	/// <example>4ucmqplxb029</example>
+	/// <param name="gameProviderCode">The game provider code. Example: <example>KY</example></param>
+	/// <param name="playerCode">The player code. Example: <example>4ucmqplxb029</example></param>
 	/// <returns></returns>
 	[HttpDelete("Delete/{gameProviderCode}/{playerCode}")]
 	public ValueTask DeleteAsync(

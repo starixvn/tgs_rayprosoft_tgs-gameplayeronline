@@ -22,14 +22,14 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 		if (fundBalanceReply.Balance == 0)
 		{
 			await messageSender.PublishAsync(
-			   subject: "game.gameplayeronline.delete.request",
-			   data: new PlayerOnlineDeleteRequest
-			   {
-				   GameProviderCode = command.GameProviderCode,
-				   PlayerCode = command.PlayerCode
-			   },
-			   cancellationToken: cancellationToken)
-			   .ConfigureAwait(false);
+				subject: "game.gameplayeronline.delete.request",
+				data: new PlayerOnlineDeleteRequest
+				{
+					GameProviderCode = command.GameProviderCode,
+					PlayerCode = command.PlayerCode
+				},
+				cancellationToken: cancellationToken)
+				.ConfigureAwait(false);
 
 			return;
 		}

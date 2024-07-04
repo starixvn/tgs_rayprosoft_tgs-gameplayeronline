@@ -15,7 +15,7 @@ internal sealed class PlayerOnlineRepository(IMongoDatabase database) : IPlayerO
 			.GetCollection<PlayerOnlineModel>()
 			.CreateIndicesAsync(cancellationToken);
 
-	public async ValueTask<PlayerOnlineForm?> GetAsync(
+	public async ValueTask<PlayerOnline?> GetAsync(
 		string gameProviderCode,
 		string playerCode,
 		CancellationToken cancellationToken = default)
@@ -57,7 +57,7 @@ internal sealed class PlayerOnlineRepository(IMongoDatabase database) : IPlayerO
 				ExpireOn: data.ExpireOn);
 	}
 
-	public async IAsyncEnumerable<PlayerOnlineForm> GetUpdatedBeforeAsync(
+	public async IAsyncEnumerable<PlayerOnline> GetUpdatedBeforeAsync(
 		DateTime lastUpdateOn,
 		[EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
