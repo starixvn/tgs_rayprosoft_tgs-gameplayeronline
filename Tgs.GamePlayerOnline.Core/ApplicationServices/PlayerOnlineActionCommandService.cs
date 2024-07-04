@@ -8,12 +8,14 @@ internal class PlayerOnlineActionCommandService(
 {
 	public ValueTask ExecuteAsync(PlayerOnlineActionCommand command, CancellationToken cancellationToken = default)
 	{
-		return command.Balance > 0.0m && command.IsUpsert
+		var balance = command.Balance;
+		var isTraceTarget = balance >= 0.01m && command.IsUpsert;
+		return isTraceTarget
 			? upsertService.ExecuteAsync(
 				command: new PlayerOnlineUpsertCommand(
 					GameProviderCode: command.GameProviderCode,
 					PlayerCode: command.PlayerCode,
-					Balance: command.Balance,
+					Balance: balance,
 					FreeBalance: command.FreeBalance,
 					OutstandingBalance: command.OutstandingBalance),
 				cancellationToken: cancellationToken)
