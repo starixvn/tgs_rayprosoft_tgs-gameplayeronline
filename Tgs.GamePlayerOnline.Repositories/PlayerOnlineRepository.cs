@@ -10,10 +10,29 @@ namespace Tgs.GamePlayerOnline.Repositories;
 
 internal sealed class PlayerOnlineRepository(IMongoDatabase database) : IPlayerOnlineRepository
 {
-	public ValueTask InitializeAsync(CancellationToken cancellationToken = default)
-		=> database
-			.GetCollection<PlayerOnlineModel>()
-			.CreateIndicesAsync(cancellationToken);
+	public async ValueTask InitializeAsync(CancellationToken cancellationToken = default)
+	{
+		await database.GetCollection<PlayerOnlineModel>()
+			.CreateIndicesAsync(cancellationToken)
+			.ConfigureAwait(false);
+
+		var index = Builders<PlayerOnlineModel>.IndexKeys
+			.Ascending(m => m.GameProviderCode)
+			.Ascending(m => m.PlayerCode);
+
+		var createIndexOptions = new CreateIndexOptions
+		{
+			Unique = true,
+			Name = $"uni_player_onlines"
+		};
+		var createIndexModel = new CreateIndexModel<PlayerOnlineModel>(index, createIndexOptions);
+
+		await database.GetCollection<PlayerOnlineModel>().Indexes.CreateOneAsync(
+			model: createIndexModel,
+			cancellationToken: cancellationToken)
+			.ConfigureAwait(false);
+
+	}
 
 	public async ValueTask<PlayerOnline?> GetAsync(
 		string gameProviderCode,
