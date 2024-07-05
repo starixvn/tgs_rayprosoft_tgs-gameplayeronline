@@ -73,7 +73,11 @@ builder.Services.AddHangfire(
 
 builder.Services
 	.AddOptions<FundInWhitelistOptions>()
-	.Configure((options) => builder.Configuration.GetSection("FundInWhitelistOptions").Bind(options))
+	.Configure((options) =>
+	{
+		builder.Configuration.GetSection("FundInWhitelistOptions").Bind(options);
+		options.ReleaseNamespace = builder.Configuration.GetValue<string>("RELEASE_NAMESPACE")!;
+	})
 	.Services
 	.AddGamePlayerOnline(
 	(options, sp) =>
