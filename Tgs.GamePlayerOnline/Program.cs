@@ -9,6 +9,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Tgs.GamePlayerOnline;
+using Tgs.GamePlayerOnline.Core;
 using Tgs.GamePlayerOnline.Messages;
 using Tgs.MessageQueue.Nats.Serializers;
 
@@ -70,7 +71,11 @@ builder.Services.AddHangfire(
 	})
 	.AddHangfireServer();
 
-builder.Services.AddGamePlayerOnline(
+builder.Services
+	.AddOptions<FundInWhitelistOptions>()
+	.Configure((options) => builder.Configuration.GetSection("FundInWhitelistOptions").Bind(options))
+	.Services
+	.AddGamePlayerOnline(
 	(options, sp) =>
 	{
 		var configuration = sp.GetRequiredService<IConfiguration>();
@@ -81,10 +86,10 @@ builder.Services.AddGamePlayerOnline(
 		var configuration = sp.GetRequiredService<IConfiguration>();
 		options.BaseUrl = configuration.GetValue<Uri>("GamePlayerOnlineConnectionStrings:GameProvidersClientBaseUrl")!;
 	})
-	.AddGameFundTransferClient((options, sp) =>
+	.AddGameProvidersPluggableServerClient((options, sp) =>
 	{
 		var configuration = sp.GetRequiredService<IConfiguration>();
-		options.BaseUrl = configuration.GetValue<Uri>("GamePlayerOnlineConnectionStrings:GameFundTransferClientBaseUrl")!;
+		options.BaseUrl = configuration.GetValue<Uri>("GamePlayerOnlineConnectionStrings:GameProvidersPluggableClientBaseUrl")!;
 	});
 
 builder.Services

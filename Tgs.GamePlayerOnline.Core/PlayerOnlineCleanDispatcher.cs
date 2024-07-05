@@ -4,17 +4,12 @@ using Tgs.GamePlayerOnline.Core.ApplicationServices;
 
 namespace Tgs.GamePlayerOnline.Core;
 
-internal class PlayerOnlineCleanDispatcher : IPlayerOnlineCleanDispatcher, IDisposable, IAsyncDisposable
+internal class PlayerOnlineCleanDispatcher(IServiceProvider serviceProvider) : IPlayerOnlineCleanDispatcher, IDisposable, IAsyncDisposable
 {
-	private readonly PlayerOnlineCleanChannel _channel;
+	private readonly PlayerOnlineCleanChannel _channel = ActivatorUtilities.CreateInstance<PlayerOnlineCleanChannel>(serviceProvider);
 	private readonly CancellationTokenSource _cancellationTokenSource = new();
 
 	private bool _disposedValue;
-
-	public PlayerOnlineCleanDispatcher(IServiceProvider serviceProvider)
-	{
-		_channel = ActivatorUtilities.CreateInstance<PlayerOnlineCleanChannel>(serviceProvider);
-	}
 
 	~PlayerOnlineCleanDispatcher() => Dispose(false);
 
