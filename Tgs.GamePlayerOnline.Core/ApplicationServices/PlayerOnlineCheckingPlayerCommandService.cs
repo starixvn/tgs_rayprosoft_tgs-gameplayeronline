@@ -30,6 +30,18 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 			|| command.FreeBalance != playerBalanceInfo.FreeBalance
 			|| command.OutstandingBalance != playerBalanceInfo.OutstandingBalance;
 
+		logger.LogInformation("{logInformation}",
+			new
+			{
+				LongOn = DateTime.Now.ToString("o"),
+				command.PlayerCode,
+				command.GameProviderCode,
+				playerBalanceInfo.Balance,
+				playerBalanceInfo.FreeBalance,
+				playerBalanceInfo.OutstandingBalance,
+				Message = $"玩家餘額變動-{online}"
+			});
+
 		if (!online)
 		{
 			var playerOnlineResponse = await gameProvidersClient.PlayerOnlineAsync(
