@@ -17,7 +17,7 @@ data:
         "GameProvidersPluggableClientBaseUrl": "http://game-pluggable-service/"
       },
       "FundInWhitelistOptions": {
-        "ReleaseNamespace": "{{ .Values.namespace }}",
+        "ReleaseNamespace": "{{ .Release.Namespace }}",
         "ReleaseNamespaces": [
           "dev",
           "staging"
