@@ -71,6 +71,17 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 
 		if (playerBalanceInfo.FreeBalance >= 1)
 		{
+			logger.LogInformation("{logInformation}",
+				new
+				{
+					LongOn = DateTime.Now.ToString("o"),
+					command.PlayerCode,
+					command.GameProviderCode,
+					playerBalanceInfo.Balance,
+					playerBalanceInfo.FreeBalance,
+					playerBalanceInfo.OutstandingBalance,
+					Message = $"玩家可用餘額大於等於1-{playerBalanceInfo.FreeBalance}"
+				});
 			return;
 		}
 
