@@ -10,6 +10,7 @@ data:
         "LogLevel": {
           "Default": "Warning",
           "Tgs.GamePlayerOnline.Messages": "Information"
+          "Tgs.GamePlayerOnline.Core.ApplicationServices.PlayerOnlineCheckingPlayerCommandService": "Information"
         }
       },
       "GamePlayerOnlineConnectionStrings": {

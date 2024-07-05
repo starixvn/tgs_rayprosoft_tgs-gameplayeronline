@@ -1,6 +1,4 @@
-﻿using Amazon.Runtime.Internal.Util;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
 using Tgs.GamePlayerOnline.Protos;
 using Tgs.GameProviders.Client;
 using Tgs.GameProviders.Pluggable.Client;
@@ -17,20 +15,20 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 {
 	public async ValueTask ExecuteAsync(PlayerOnlineCheckingPlayerCommand command, CancellationToken cancellationToken = default)
 	{
-		var fundBalanceReply = await backofficePluggableClient.GetBalanceInfoAsync(
+		var playerBalanceInfo = await backofficePluggableClient.GetBalanceInfoAsync(
 			playerCode: command.PlayerCode,
 			gameProviderCode: command.GameProviderCode,
 			cancellationToken: cancellationToken)
 			.ConfigureAwait(false);
 
-		if (fundBalanceReply.Balance == 0 || fundBalanceReply.FreeBalance <= 0)
+		if (playerBalanceInfo.Balance == 0 || playerBalanceInfo.FreeBalance <= 0)
 		{
 			return;
 		}
 
-		var online = command.Balance != fundBalanceReply.Balance
-			|| command.FreeBalance != fundBalanceReply.FreeBalance
-			|| command.OutstandingBalance != fundBalanceReply.OutstandingBalance;
+		var online = command.Balance != playerBalanceInfo.Balance
+			|| command.FreeBalance != playerBalanceInfo.FreeBalance
+			|| command.OutstandingBalance != playerBalanceInfo.OutstandingBalance;
 
 		if (!online)
 		{
@@ -48,7 +46,7 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 			return;
 		}
 
-		if (fundBalanceReply.FreeBalance is >= 1)
+		if (playerBalanceInfo.FreeBalance is >= 1)
 		{
 			return;
 		}
@@ -59,6 +57,19 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 		 * 2.遊戲商餘額轉回主錢包
 		 * 3.刪除紀錄資料
 		 */
+
+		logger.LogInformation("{logInformation}",
+			new
+			{
+				LongOn = DateTime.Now.ToString("o"),
+				command.PlayerCode,
+				command.GameProviderCode,
+				playerBalanceInfo.Balance,
+				playerBalanceInfo.FreeBalance,
+				playerBalanceInfo.OutstandingBalance,
+				Message = "玩家遊戲錢包轉入主錢包-執行"
+			});
+
 		try
 		{
 			var playerLogoutResponse = await gameProvidersClient.PlayerLogoutAsync(
@@ -83,7 +94,10 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 					LongOn = DateTime.Now.ToString("o"),
 					command.PlayerCode,
 					command.GameProviderCode,
-					Message = "玩家登出功能發生異常。"
+					playerBalanceInfo.Balance,
+					playerBalanceInfo.FreeBalance,
+					playerBalanceInfo.OutstandingBalance,
+					Message = "玩家登出-異常"
 				});
 		}
 
@@ -101,7 +115,10 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 					LongOn = DateTime.Now.ToString("o"),
 					command.PlayerCode,
 					command.GameProviderCode,
-					Message = "玩家遊戲錢包轉匯主錢包功能成功。"
+					playerBalanceInfo.Balance,
+					playerBalanceInfo.FreeBalance,
+					playerBalanceInfo.OutstandingBalance,
+					Message = "玩家遊戲錢包轉入主錢包-成功"
 				});
 		}
 		catch (Exception ex)
@@ -112,7 +129,10 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 					LongOn = DateTime.Now.ToString("o"),
 					command.PlayerCode,
 					command.GameProviderCode,
-					Message = "玩家遊戲錢包轉匯主錢包功能發生異常。"
+					playerBalanceInfo.Balance,
+					playerBalanceInfo.FreeBalance,
+					playerBalanceInfo.OutstandingBalance,
+					Message = "玩家遊戲錢包轉入主錢包-異常"
 				});
 		}
 		finally
