@@ -43,10 +43,21 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 
 		if (online)
 		{
+			logger.LogInformation("{logInformation}",
+				new
+				{
+					LongOn = DateTime.Now.ToString("o"),
+					command.PlayerCode,
+					command.GameProviderCode,
+					playerBalanceInfo.Balance,
+					playerBalanceInfo.FreeBalance,
+					playerBalanceInfo.OutstandingBalance,
+					Message = "玩家在線"
+				});
 			return;
 		}
 
-		if (playerBalanceInfo.FreeBalance is >= 1)
+		if (playerBalanceInfo.FreeBalance >= 1)
 		{
 			return;
 		}
