@@ -8,6 +8,19 @@ internal sealed class PlayerOnlineUpsertService(
 {
 	public async ValueTask ExecuteAsync(PlayerOnlineUpsertCommand command, CancellationToken cancellationToken = default)
 	{
+		var playerOnline = await playerOnlineRepository.GetAsync(
+			gameProviderCode: command.GameProviderCode,
+			playerCode: command.PlayerCode,
+			cancellationToken).ConfigureAwait(false);
+
+		if (playerOnline is not null
+			&& playerOnline.Balance == command.Balance
+			&& playerOnline.FreeBalance == command.FreeBalance
+			&& playerOnline.OutstandingBalance == command.OutstandingBalance)
+		{
+			return;
+		}
+
 		await playerOnlineRepository
 			.UpsertAsync(
 				gameProviderCode: command.GameProviderCode,
