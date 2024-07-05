@@ -106,7 +106,7 @@ internal sealed class PlayerOnlineRepository(IMongoDatabase database) : IPlayerO
 			.Set(m => m.FreeBalance, freeBalance)
 			.Set(m => m.OutstandingBalance, outstandingBalance)
 			.Set(m => m.UpdateOn, now)
-			.Set(m => m.ExpireOn, now.AddDays(1));
+			.Set(m => m.ExpireOn, now.AddHours(1));
 
 		var options = new UpdateOptions
 		{

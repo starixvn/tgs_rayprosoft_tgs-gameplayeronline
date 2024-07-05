@@ -8,13 +8,20 @@ data:
     {
       "Logging": {
         "LogLevel": {
-            "Default": "Warning",
-            "Tgs.GamePlayerOnline.Messages": "Information"
-         }
+          "Default": "Warning",
+          "Tgs.GamePlayerOnline.Messages": "Information"
+        }
       },
       "GamePlayerOnlineConnectionStrings": {
         "GameProvidersClientBaseUrl": "http://game-gameproviders/",
-        "GameFundTransferClientBaseUrl": "dns:///game-gamefundtransfer:9090/"
+        "GameProvidersPluggableClientBaseUrl": "http://game-pluggable-service/"
+      },
+      "FundInWhitelistOptions": {
+        "ReleaseNamespace": "{{ .Values.namespace }}",
+        "ReleaseNamespaces": [
+          "dev",
+          "staging"
+        ]
       }
     }
   otel-collector-config.yaml: |

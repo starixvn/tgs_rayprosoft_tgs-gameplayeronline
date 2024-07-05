@@ -14,7 +14,7 @@ internal class GamePlayerOnlineCleanMessageHandler(
 			new
 			{
 				LongOn = DateTime.Now.ToString("o"),
-				Subject = subject
+				Subject = subject,
 			});
 
 		return dispatcher.PushCommandAsync(
