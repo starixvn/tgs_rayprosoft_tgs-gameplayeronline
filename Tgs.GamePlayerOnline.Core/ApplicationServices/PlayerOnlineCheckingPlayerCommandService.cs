@@ -67,7 +67,7 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 				playerBalanceInfo.Balance,
 				playerBalanceInfo.FreeBalance,
 				playerBalanceInfo.OutstandingBalance,
-				Message = "玩家遊戲錢包轉匯主錢包功能執行。"
+				Message = "玩家遊戲錢包轉入主錢包-執行"
 			});
 
 		try
@@ -97,7 +97,7 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 					playerBalanceInfo.Balance,
 					playerBalanceInfo.FreeBalance,
 					playerBalanceInfo.OutstandingBalance,
-					Message = "玩家登出功能發生異常。"
+					Message = "玩家登出-異常"
 				});
 		}
 
@@ -118,7 +118,7 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 					playerBalanceInfo.Balance,
 					playerBalanceInfo.FreeBalance,
 					playerBalanceInfo.OutstandingBalance,
-					Message = "玩家遊戲錢包轉匯主錢包功能成功。"
+					Message = "玩家遊戲錢包轉入主錢包-成功"
 				});
 		}
 		catch (Exception ex)
@@ -132,7 +132,7 @@ internal class PlayerOnlineCheckingPlayerCommandService(
 					playerBalanceInfo.Balance,
 					playerBalanceInfo.FreeBalance,
 					playerBalanceInfo.OutstandingBalance,
-					Message = "玩家遊戲錢包轉匯主錢包功能發生異常。"
+					Message = "玩家遊戲錢包轉入主錢包-異常"
 				});
 		}
 		finally
