@@ -11,12 +11,13 @@ using OpenTelemetry.Trace;
 using Tgs.GamePlayerOnline;
 using Tgs.GamePlayerOnline.Core;
 using Tgs.GamePlayerOnline.Messages;
+using Tgs.GamePlayerOnline.Middlewares;
 using Tgs.MessageQueue.Nats.Serializers;
 
 var filterInstrumentations = new[] { "html", "ico", "png", "jpg" };
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.WebHost.UseSentry();
 builder.Logging
 	.AddOpenTelemetry(options =>
 	{
@@ -144,12 +145,13 @@ builder.Services
 	.AddServiceUtiltiyInterceptors();
 
 builder.Services.AddHealthChecks();
-
+builder.Services.AddScoped<ExceptionMiddleware>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 _ = app.UseSwagger();
 _ = app.UseSwaggerUI();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHangfireDashboard(
 	"/hangfire",
@@ -161,6 +163,7 @@ app.UseHangfireDashboard(
 	});
 
 _ = app.MapControllers();
+
 
 app.MapHealthChecks("/healthz");
 
