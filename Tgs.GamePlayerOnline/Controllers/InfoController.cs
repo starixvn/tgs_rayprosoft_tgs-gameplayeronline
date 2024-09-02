@@ -9,38 +9,37 @@ namespace Tgs.GamePlayerOnline.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class InfoController(
-	IConfiguration configuration) : ControllerBase
+public class InfoController : ControllerBase
 {
 	/// <summary>
 	/// Gets the asynchronous.
 	/// </summary>
-	/// <param name="_hostingEnvironment">The hosting environment.</param>
+	/// <param name="webHostEnvironment">The web host environment.</param>
+	/// <param name="configuration">The configuration.</param>
+	/// <param name="fundInWhitelistOptions">The fund in whitelist options.</param>
 	/// <returns></returns>
 	[HttpGet]
 	public async Task<object> GetAsync(
-		[FromServices] IWebHostEnvironment _hostingEnvironment,
+		[FromServices] IWebHostEnvironment webHostEnvironment,
+		[FromServices] IConfiguration configuration,
 		[FromServices] IOptions<FundInWhitelistOptions> fundInWhitelistOptions)
 	{
 		var hostName = Dns.GetHostName();
 		var hostEntry = await Dns.GetHostEntryAsync(hostName).ConfigureAwait(false);
 		var hostIp = Array.Find(hostEntry.AddressList,
 			x => x.AddressFamily == AddressFamily.InterNetwork);
+
 		return new
 		{
-			Data = new
-			{
-				Environment.MachineName,
-				HostName = hostName,
-				HostIp = hostIp?.ToString() ?? string.Empty,
-				Environment = _hostingEnvironment.EnvironmentName,
-				OsVersion = $"{Environment.OSVersion}",
-				Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(),
-				ProcessCount = Environment.ProcessorCount,
-				ReleaseNamespace = configuration.GetValue<string>("RELEASE_NAMESPACE"),
-				PodIPAddress = configuration.GetValue<string>("POD_IP"),
-				FundInWhitelistOptions = fundInWhitelistOptions.Value
-			}
+			Environment.MachineName,
+			HostName = hostName,
+			HostIp = hostIp?.ToString() ?? string.Empty,
+			Environment = webHostEnvironment.EnvironmentName,
+			OsVersion = $"{Environment.OSVersion}",
+			Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(),
+			ProcessCount = Environment.ProcessorCount,
+			GamePlayerOnlineConnectionStrings = configuration.GetSection("GamePlayerOnlineConnectionStrings").Get<Dictionary<string, string>>(),
+			FundInWhitelistOptions = fundInWhitelistOptions.Value
 		};
 	}
 }

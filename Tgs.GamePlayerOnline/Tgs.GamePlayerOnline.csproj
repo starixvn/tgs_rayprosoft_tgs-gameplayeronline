@@ -4,11 +4,6 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<UserSecretsId>80f779ee-8fc7-410f-be42-337a10867d08</UserSecretsId>
-		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-	</PropertyGroup>
-
-	<PropertyGroup>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
 		<NoWarn>$(NoWarn);1591;1573;0063</NoWarn>
 	</PropertyGroup>
@@ -28,7 +23,7 @@
 		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.9.0" />
 		<PackageReference Include="PhoenixToolkits.MessageQueue.Direct" Version="2.2.0" />
 		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="2.2.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
 		<PackageReference Include="Tgs.Interceptors" Version="0.2.1" />
 		<PackageReference Include="Tgs.MessageQueue.Nats.Serializers" Version="0.0.2" />
 	</ItemGroup>
