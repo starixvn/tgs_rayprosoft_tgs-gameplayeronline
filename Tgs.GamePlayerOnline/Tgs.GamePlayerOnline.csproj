@@ -25,7 +25,7 @@
 		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.9.0" />
 		<PackageReference Include="PhoenixToolkits.MessageQueue.Direct" Version="2.2.0" />
 		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="2.2.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
 		<PackageReference Include="Tgs.Interceptors" Version="0.2.1" />
 		<PackageReference Include="Tgs.MessageQueue.Nats.Serializers" Version="0.0.2" />
 	</ItemGroup>
